@@ -6,11 +6,18 @@ import (
 
 func main() {
 
-	for i := 1; i <= 10; i++ {
+	max := 0
+
+	for i := 1; ; i++ {
+
 		sum := SumN(i)
 		list := ListDivisors(sum)
 
-		fmt.Printf("%02d: %d %v\n", i, sum, list)
+		if len(list) > max {
+			fmt.Printf("Triangle number %d has %d divisors.\n", sum, len(list))
+			max = len(list)
+		}
+
 	}
 }
 
