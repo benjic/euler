@@ -2,15 +2,20 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"strconv"
 	"strings"
 )
 
 func main() {
 
-	number, _ := strconv.ParseInt(os.Args[1], 10, 64)
-	fmt.Println(BuildEnglishNumber(number))
+	sum := 0
+
+	for i := int64(1); i <= 1000; i++ {
+		written_expression := BuildEnglishNumber(i)
+		fmt.Printf("%s %d\n", written_expression, len(strings.Replace(written_expression, " ", "", -1)))
+		sum += len(strings.Replace(written_expression, " ", "", -1))
+	}
+
+	fmt.Println(sum)
 }
 
 func BuildEnglishNumber(n int64) string {
@@ -21,7 +26,7 @@ func BuildEnglishNumber(n int64) string {
 	if (n % 100) < 20 {
 		tens = 0
 		ones = n % 20
-		split = "and "
+		split = ""
 	} else {
 		ones = n % 10
 		tens = ((n % 100) - ones)
@@ -32,11 +37,15 @@ func BuildEnglishNumber(n int64) string {
 	thousands := (n - hundreds - tens - (n % 10)) / 1000
 
 	if thousands > 0 {
-		number_str += fmt.Sprintf("%s thousand ", NumericToWritten(thousands))
+		number_str += fmt.Sprintf("%sthousand ", NumericToWritten(thousands))
 	}
 
 	if hundreds > 0 {
-		number_str += fmt.Sprintf("%s hundred ", NumericToWritten(hundreds))
+		if tens > 0 || ones > 0 {
+			number_str += fmt.Sprintf("%s hundred and ", NumericToWritten(hundreds))
+		} else {
+			number_str += fmt.Sprintf("%s hundred", NumericToWritten(hundreds))
+		}
 	}
 
 	if tens > 0 {
@@ -47,7 +56,7 @@ func BuildEnglishNumber(n int64) string {
 		number_str += fmt.Sprintf("%s%s ", split, NumericToWritten(ones))
 	}
 
-	return strings.Trim(number_str, " ")
+	return strings.TrimRight(number_str, "- ")
 
 }
 
@@ -93,21 +102,21 @@ func NumericToWritten(n int64) string {
 	case 19:
 		return "nineteen"
 	case 20:
-		return "twenty"
+		return "twenty "
 	case 30:
-		return "thirty"
+		return "thirty "
 	case 40:
-		return "forty"
+		return "forty "
 	case 50:
-		return "fifty"
+		return "fifty "
 	case 60:
-		return "sixty"
+		return "sixty "
 	case 70:
-		return "seventy"
+		return "seventy "
 	case 80:
-		return "eighty"
+		return "eighty "
 	case 90:
-		return "ninty"
+		return "ninety "
 
 	}
 
